@@ -3,6 +3,7 @@ package shoppingcart;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import shoppingcart.common.Storage;
 import shoppingcart.dto.Cart;
 import shoppingcart.dto.CartItem;
 import shoppingcart.dto.Customer;
@@ -16,8 +17,6 @@ import shoppingcart.service.ShopService;
 import shoppingcart.service.ShoppingCartService;
 
 public class Main {
-	static Shop shop;
-	static Cart cart;
 	static Customer customer;
 	static Scanner sc = new Scanner(System.in);
 	
@@ -57,7 +56,7 @@ public class Main {
 		System.out.print("Enter your option: ");
 		int opt = Integer.parseInt(sc.nextLine());
 		
-		shop = shopService.getShopByIndex(opt-1);
+		Storage.currentShop = shopService.getShopByIndex(opt-1);
 	}
 	
 	public static boolean doLogin() {
@@ -68,18 +67,18 @@ public class Main {
 		String userPassword = sc.nextLine();
 		System.out.println("------------------------------");
 		
-		customer = authenService.login(shop, userID, userPassword);
+		customer = authenService.login(userID, userPassword);
 		if (customer == null) {
 			System.out.println("Invalid username/password");
 			return false;
 		}
-		cart = new Cart();
+		Storage.cart = new Cart();
 		
 		return true;
 	}
 	
 	private static boolean openShopMenu() {
-		System.out.println("\nWelcome to " + shop.name);
+		System.out.println("\nWelcome to " + Storage.currentShop.name);
 		System.out.println("------------------------------");
 		System.out.println("| 0. Quit                    |");
 		System.out.println("| 1. View Cart               |");
@@ -106,11 +105,11 @@ public class Main {
 				
 				System.out.print("Select a product: ");
 				int selectedOpt = Integer.parseInt(sc.nextLine());
-				Product selectedProduct = productService.getProductByIndex(shop, selectedOpt-1);
+				Product selectedProduct = productService.getProductByIndex(selectedOpt-1);
 				
 				System.out.print("Enter quantity: ");
 				int quantity = Integer.parseInt(sc.nextLine());
-				cartService.addToCart(cart, selectedProduct, quantity);
+				cartService.addProductToCart(selectedProduct, quantity);
 				
 				break;
 			case OPT_CHECKOUT:
@@ -123,11 +122,11 @@ public class Main {
 	}
 	
 	public static void checkOut() {
-		if (cart.items.size() == 0) {
+		if (Storage.cart.items.size() == 0) {
 			System.out.println("Your shopping cart is empty.");
 			return;
 		}
-		double totalProductPrice = cartService.getTotalProductPrice(cart);
+		double totalProductPrice = cartService.getTotalProductPriceInCart();
 		
 		System.out.println("\nCHECKOUT");
 		System.out.println("------------------------------");
@@ -135,26 +134,28 @@ public class Main {
 		// Show all products in cart
 		showCart();
 		
-		System.out.println("Ship: " + shop.shippingPrice + " aud");
-		System.out.println("=> Total price: " + (totalProductPrice + shop.shippingPrice));
+		double shippingPrice = Storage.currentShop.shippingPrice;
+		
+		System.out.println("Ship: " + shippingPrice + " aud");
+		System.out.println("=> Total price: " + (totalProductPrice + shippingPrice));
 		System.out.println();
 		
 		// Show discount
-		Rank customerRank = rankService.getRankByName(shop, customer.rank);
-		double discount = rankService.applyDiscount(shop, customerRank, totalProductPrice);
+		Rank customerRank = rankService.getRankByName(customer.rank);
+		double discount = rankService.applyDiscount(customerRank, totalProductPrice);
 		
 		System.out.println("Rank promotion: " + customerRank.name + " - " + customerRank.description);
 		System.out.println("=> Total discount: -" + discount + " aud");
 		System.out.println();
 		
 		// Show final price
-		double finalPrice = totalProductPrice + shop.shippingPrice - discount;
+		double finalPrice = totalProductPrice + Storage.currentShop.shippingPrice - discount;
 		System.out.println("Final price: " + finalPrice + " aud");
 		
 		System.out.println("------------------------------");
 		System.out.println("Check out successful!");
 		
-		cart = null;
+		Storage.cart = null;
 	}
 	
 	// Show list
@@ -168,7 +169,7 @@ public class Main {
 	}
 	
 	public static void showProductList() {
-		ArrayList<Product> productList = productService.getAllProducts(shop);
+		ArrayList<Product> productList = productService.getAllProducts();
 		
 		if (productList.size() == 0) {
 			System.out.println("There aren't any product in shop");
@@ -182,7 +183,7 @@ public class Main {
 	}
 	
 	public static void showRankList() {
-		ArrayList<Rank> rankList = rankService.getAllRanks(shop);
+		ArrayList<Rank> rankList = rankService.getAllRanks();
 		
 		System.out.println("Available ranks and promotions:");
 		for (int i=0; i<rankList.size(); i++) {
@@ -192,14 +193,14 @@ public class Main {
 	}
 	
 	public static void showCart() {
-		if (cart.items.size() == 0) {
+		if (Storage.cart.items.size() == 0) {
 			System.out.println("Your shopping cart is empty.");
 			return;
 		}
 		
 		System.out.println("Your shopping cart includes:");
-		for (int i=0; i<cart.items.size(); i++) {
-			CartItem item = cart.items.get(i);
+		for (int i=0; i<Storage.cart.items.size(); i++) {
+			CartItem item = Storage.cart.items.get(i);
 			double total = item.price * item.quantity;
 			System.out.println((i+1) + ". " + item.name + " - " + item.price + " aud" + " : " + item.quantity + " ea => " + total + " aud");
 		}

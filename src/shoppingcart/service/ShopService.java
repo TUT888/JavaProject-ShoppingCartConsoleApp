@@ -5,17 +5,18 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import shoppingcart.common.Storage;
 import shoppingcart.dto.Shop;
 
 public class ShopService {
-	private static final String SHOP_FILE_PATH = "src/shoppingcart/db/shop/shop.txt";
-	
 	public ArrayList<Shop> getAllShops() {
+		String filepath = Storage.DB_PATH + "shop/shop.txt";
+		
 		ArrayList<Shop> shopList = new ArrayList<Shop>();
 		
 		try {
 			// Read from text file
-			File myObj = new File(SHOP_FILE_PATH);
+			File myObj = new File(filepath);
 			Scanner myReader = new Scanner(myObj);
 			myReader.nextLine();
 			

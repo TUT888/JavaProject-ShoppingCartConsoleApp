@@ -5,14 +5,12 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import shoppingcart.common.Storage;
 import shoppingcart.dto.Customer;
-import shoppingcart.dto.Shop;
 
 public class CustomerService {
-	private static final String DB_PATH = "src/shoppingcart/db/";
-
-	public ArrayList<Customer> getAllCustomers(Shop shop) {
-		String filepath = DB_PATH + shop.dbPath + "/customer.txt";
+	public ArrayList<Customer> getAllCustomers() {
+		String filepath = Storage.DB_PATH + Storage.currentShop.dbPath + "/customer.txt";
 		
 		ArrayList<Customer> customerList = new ArrayList<Customer>();
 		

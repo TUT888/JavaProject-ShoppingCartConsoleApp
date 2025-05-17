@@ -5,14 +5,12 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import shoppingcart.common.Storage;
 import shoppingcart.dto.Rank;
-import shoppingcart.dto.Shop;
 
 public class RankService {
-	private static final String DB_PATH = "src/shoppingcart/db/";
-	
-	public ArrayList<Rank> getAllRanks(Shop shop) {
-		String filepath = DB_PATH + shop.dbPath + "/rank.txt";
+	public ArrayList<Rank> getAllRanks() {
+		String filepath = Storage.DB_PATH + Storage.currentShop.dbPath + "/rank.txt";
 		
 		ArrayList<Rank> rankList = new ArrayList<Rank>();
 		
@@ -37,8 +35,8 @@ public class RankService {
 		return rankList;
 	}
 	
-	public Rank getRankByName(Shop shop, String name) {
-		ArrayList<Rank> rankList = getAllRanks(shop);
+	public Rank getRankByName(String name) {
+		ArrayList<Rank> rankList = getAllRanks();
 		
 		for (Rank rank : rankList) {
 			if (rank.name.equals(name)) {
@@ -48,8 +46,8 @@ public class RankService {
 		return null;
 	}
 	
-	public double applyDiscount(Shop shop, Rank rank, double productPrice) {
-		double shippingDiscount = shop.shippingPrice * rank.shippingDiscount / 100;
+	public double applyDiscount(Rank rank, double productPrice) {
+		double shippingDiscount = Storage.currentShop.shippingPrice * rank.shippingDiscount / 100;
 		double productDiscount = productPrice * rank.productDiscount / 100;
 		
 		return shippingDiscount + productDiscount;

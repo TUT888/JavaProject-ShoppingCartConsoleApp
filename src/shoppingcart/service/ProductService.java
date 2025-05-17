@@ -5,14 +5,12 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import shoppingcart.common.Storage;
 import shoppingcart.dto.Product;
-import shoppingcart.dto.Shop;
 
 public class ProductService {
-	private static final String DB_PATH = "src/shoppingcart/db/";
-	
-	public ArrayList<Product> getAllProducts(Shop shop) {
-		String filepath = DB_PATH + shop.dbPath + "/product.txt";
+	public ArrayList<Product> getAllProducts() {
+		String filepath = Storage.DB_PATH + Storage.currentShop.dbPath + "/product.txt";
 		
 		ArrayList<Product> productList = new ArrayList<Product>();
 		
@@ -37,8 +35,8 @@ public class ProductService {
 		return productList;
 	}
 	
-	public Product getProductByIndex(Shop shop, int index) {
-		ArrayList<Product> productList = getAllProducts(shop);
+	public Product getProductByIndex(int index) {
+		ArrayList<Product> productList = getAllProducts();
 		
 		if (index < 0 || index > productList.size()) {
 			System.out.println("Invalid product id");

@@ -1,27 +1,27 @@
 package shoppingcart.service;
 
-import shoppingcart.dto.Cart;
+import shoppingcart.common.Storage;
 import shoppingcart.dto.CartItem;
 import shoppingcart.dto.Product;
 
 public class ShoppingCartService {
-	public boolean addToCart(Cart cart, Product product, int quantity) {
+	public boolean addProductToCart(Product product, int quantity) {
 		if (product == null) {
 			System.out.println("Product does not exists, can not add to cart");
 			return false;
 		}
 		
-		CartItem item = findProduct(cart, product);
+		CartItem item = findProductInCart(product);
 		if (item != null) {
 			item.quantity += quantity;
 		} else {
-			cart.items.add(new CartItem(product, quantity));
+			Storage.cart.items.add(new CartItem(product, quantity));
 		}
 		return true;
 	}
 
-	public CartItem findProduct(Cart cart, Product product) {
-		for (CartItem item : cart.items) {
+	public CartItem findProductInCart(Product product) {
+		for (CartItem item : Storage.cart.items) {
 			if (item.name.equals(product.name)) {
 				return item;
 			}
@@ -29,11 +29,11 @@ public class ShoppingCartService {
 		return null;
 	}
 	
-	public double getTotalProductPrice(Cart cart) {
+	public double getTotalProductPriceInCart() {
 		double totalProductPrice = 0.0;
 		
-		for (int i=0; i<cart.items.size(); i++) {
-			CartItem item = cart.items.get(i);
+		for (int i=0; i<Storage.cart.items.size(); i++) {
+			CartItem item = Storage.cart.items.get(i);
 			totalProductPrice += item.price * item.quantity;
 		}
 		return totalProductPrice;
