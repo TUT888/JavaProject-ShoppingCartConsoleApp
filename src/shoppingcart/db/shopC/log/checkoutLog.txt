@@ -1,0 +1,2 @@
+[New checkout] UserID: user1, Total: 73.2, Checkout time: 2025-05-17T17:19:38.521777600
+[New checkout] UserID: user2, Total: 26.59, Checkout time: 2025-05-17T17:20:41.668948700

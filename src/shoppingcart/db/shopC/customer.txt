@@ -1,0 +1,3 @@
+id,password,rank
+user1,pw1,Regular
+user2,pw2,Advanced

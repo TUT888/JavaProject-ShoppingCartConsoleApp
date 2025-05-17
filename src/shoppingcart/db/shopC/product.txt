@@ -1,0 +1,4 @@
+name,price
+Bottle,8
+Pan,25
+Plate,12

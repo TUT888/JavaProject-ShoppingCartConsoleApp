@@ -1,0 +1,3 @@
+name,description,productDiscount,shippingDiscount
+Regular,10% discount in shipping,0,10
+Advanced,25% discount in product and 2% in shipping,25,2

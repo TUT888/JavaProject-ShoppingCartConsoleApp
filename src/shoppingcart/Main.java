@@ -6,7 +6,6 @@ import java.util.Scanner;
 import shoppingcart.common.Storage;
 import shoppingcart.dto.Cart;
 import shoppingcart.dto.CartItem;
-import shoppingcart.dto.Customer;
 import shoppingcart.dto.Product;
 import shoppingcart.dto.Rank;
 import shoppingcart.dto.Shop;
@@ -15,9 +14,13 @@ import shoppingcart.service.ProductService;
 import shoppingcart.service.RankService;
 import shoppingcart.service.ShopService;
 import shoppingcart.service.ShoppingCartService;
+import shoppingcart.service.notification.NotificationService;
+import shoppingcart.service.notification.ShopANotificationService;
+import shoppingcart.service.notification.ShopBNotificationService;
+import shoppingcart.service.notification.ShopCNotificationService;
 
 public class Main {
-	static Customer customer;
+//	static Customer customer;
 	static Scanner sc = new Scanner(System.in);
 	
 	private static final int OPT_EXIT = 0;
@@ -31,6 +34,7 @@ public class Main {
 	private static ProductService productService = new ProductService();
 	private static ShopService shopService = new ShopService();
 	private static RankService rankService = new RankService();
+	private static NotificationService notificationService;
 
 	public static void main(String[] args) {
 		// Choose shop
@@ -41,6 +45,7 @@ public class Main {
 		do {
 			isLoggedin = doLogin();
 		} while (!isLoggedin);
+		
 		
 		// Shopping
 		boolean isOpen;
@@ -57,6 +62,17 @@ public class Main {
 		int opt = Integer.parseInt(sc.nextLine());
 		
 		Storage.currentShop = shopService.getShopByIndex(opt-1);
+		switch (Storage.currentShop.dbPath) {
+			case "shopA":
+				notificationService = new ShopANotificationService();
+				break;
+			case "shopB":
+				notificationService = new ShopBNotificationService();
+				break;
+			case "shopC":
+				notificationService = new ShopCNotificationService();
+				break;
+		}
 	}
 	
 	public static boolean doLogin() {
@@ -67,12 +83,13 @@ public class Main {
 		String userPassword = sc.nextLine();
 		System.out.println("------------------------------");
 		
-		customer = authenService.login(userID, userPassword);
-		if (customer == null) {
+		Storage.customer = authenService.login(userID, userPassword);
+		if (Storage.customer == null) {
 			System.out.println("Invalid username/password");
 			return false;
 		}
 		Storage.cart = new Cart();
+		notificationService.sendLoginNotification();
 		
 		return true;
 	}
@@ -98,7 +115,7 @@ public class Main {
 				break;
 			case OPT_VIEW_RANK:
 				showRankList();
-				System.out.println("Your current rank: " + customer.rank);
+				System.out.println("Your current rank: " + Storage.customer.rank);
 				break;
 			case OPT_ADD_PRODUCT:
 				showProductList();
@@ -141,7 +158,7 @@ public class Main {
 		System.out.println();
 		
 		// Show discount
-		Rank customerRank = rankService.getRankByName(customer.rank);
+		Rank customerRank = rankService.getRankByName(Storage.customer.rank);
 		double discount = rankService.applyDiscount(customerRank, totalProductPrice);
 		
 		System.out.println("Rank promotion: " + customerRank.name + " - " + customerRank.description);
@@ -155,6 +172,7 @@ public class Main {
 		System.out.println("------------------------------");
 		System.out.println("Check out successful!");
 		
+		notificationService.sendCheckoutNotification(finalPrice);
 		Storage.cart = null;
 	}
 	

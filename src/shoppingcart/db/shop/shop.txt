@@ -1,3 +1,4 @@
 id,name,dbPath,shippingPrice
 1,GeneralStore,shopA,10
 2,StationaryStore,shopB,12
+2,KitchenwareStore,shopC,8
