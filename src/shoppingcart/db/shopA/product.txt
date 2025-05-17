@@ -1,0 +1,5 @@
+name,price
+Flower,3
+Toy,5
+Phone,100
+Chair,25

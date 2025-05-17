@@ -1,0 +1,3 @@
+id,password,rank
+user1,pw1,Gold
+user2,pw2,Silver

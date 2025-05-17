@@ -1,0 +1,3 @@
+id,password,rank
+user1,pw1,Member
+user2,pw2,Premium

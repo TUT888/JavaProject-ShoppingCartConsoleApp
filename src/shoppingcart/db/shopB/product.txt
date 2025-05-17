@@ -1,0 +1,5 @@
+name,price
+Pencil,3
+Ruler,5
+Notebook,18
+Watercolor,36

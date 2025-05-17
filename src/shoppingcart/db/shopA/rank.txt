@@ -1,0 +1,4 @@
+name,description,productDiscount,shippingDiscount
+Silver,50% discount in shipping,0,50
+Gold,2% discount in product,2,0
+Diamond,3% discount in product,3,0
