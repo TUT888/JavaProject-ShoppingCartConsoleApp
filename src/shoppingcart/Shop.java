@@ -53,7 +53,6 @@ public class Shop {
 	}
 	
 	public boolean useShoppingMenu(Customer customer) {
-		// Có thể để bên ngoài luôn, thường constant đi theo class, còn trong nội bộ function thì chỉ variable
 		final int OPT_EXIT = 0;
 		final int OPT_VIEW_CART = 1;
 		final int OPT_VIEW_RANK = 2;
@@ -76,9 +75,6 @@ public class Shop {
 			case OPT_EXIT:
 				return false;
 			case OPT_VIEW_CART:
-				// Hoặc là trong main console, hoặc là trong cart (cái nào cũng ok)
-				// => tùy vào cái scope của yêu cầu, nếu chỉ in thôi thì để trong ShoppingCart 
-				// => nếu cần thêm logic tính toán thêm nữa (vd như checkout) thì ở main
 				cart.showItems();
 				break;
 			case OPT_VIEW_RANK:
@@ -104,20 +100,6 @@ public class Shop {
 		}
 	}
 	
-	// Q: Có nên chia service theo database kg? vd bỏ nó chung 1 package
-	// => Service nên theo package của service (???) Xem lại recording 10/5/2025
-	
-	// Q: Xài nhiều service như vậy thì có gom service lên đầu luôn kg
-	// Có thể để hết service làm attribute của class luôn, như cái scanner (nhưng nhớ là đúng scope)
-	
-	// ĐÔI LÚC CÓ MẤY CÁI CLASS CHỈ CHỨA
-	// - ATTRIBUT -> DATA: vd như customer (ng ta gọi là POJO - Plain Old Java Object)
-	// - FUNCTIONS -> SERVICE: gọi là service class, tạo ra để phục vụ cho 1 logic gì đó, xài class attribute
-	// 		Vd: AuthenticationService
-	
-	// nextInt & nextLine => nếu xài nextInt trước nextLine, thì nó sẽ lấy số 1, xong còn dư \n cũ ở trước đó => error "" for input string
-	// => tiêu hủy dấu enter bằng cách gọi thêm nextLine() trước dòng scanner trước đó của mình
-	
 	// doAddProductToCart
 	public void selectProductToCart() {
 		// Get user input (product)
@@ -132,12 +114,6 @@ public class Shop {
 		// Get user input (quantity)
 		System.out.print("Enter quantity for " + selectedProduct.getInfo() + ": ");
 		int quantity = Integer.parseInt(sc.nextLine());
-
-		// ĐEM CẢ ĐỐNG DƯỚI ĐÂY LÀM 1 FUNCTION BÊN CART => cart.addToCart(product, quantity)
-		// Q: Việc pass params kg liên quan lắm đến cart (cái mà nên là CartItem), thì pass vô có sao kg (về logic)?
-		// => Trong trường hợp này mình convert sang đc, và nó cũng có liên quan tí nên kg sao
-		// => Nếu cho chặt chẽ hơn, thì move hết function sang ShoppingCartService, thì nó kg còn vấn đề gì
-		// Trong cái cart service đó, mình phải pass luôn shopping cart vào, ex: cart.addToCart(cart, product, quantity)
 		
 		// Check if the product existed in cart
 		// Yes -> update quantity, No -> add new item

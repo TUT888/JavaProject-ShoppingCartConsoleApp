@@ -5,7 +5,6 @@ import java.util.ArrayList;
 public class ShoppingCart {
 	ArrayList<CartItem> cartItems = new ArrayList<CartItem>();
 	
-	// Kg cần làm kiểu này
 	public void addItem(CartItem item) {
 		cartItems.add(item);
 	}

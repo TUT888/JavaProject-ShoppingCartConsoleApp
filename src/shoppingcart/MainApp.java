@@ -2,10 +2,6 @@ package shoppingcart;
 
 import java.util.Scanner;
 
-// ALL things related to console, ex print option, get user input, etc. SHOULD BE PUT IN MAIN
-// Main can use the service classes to handle the operation needed (authentication, ... )
-// Console app: only show direction (same same with routing...)
-
 public class MainApp {
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
