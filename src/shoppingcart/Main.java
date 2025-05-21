@@ -15,9 +15,6 @@ import shoppingcart.service.RankService;
 import shoppingcart.service.ShopService;
 import shoppingcart.service.ShoppingCartService;
 import shoppingcart.service.notification.NotificationService;
-import shoppingcart.service.notification.ShopANotificationService;
-import shoppingcart.service.notification.ShopBNotificationService;
-import shoppingcart.service.notification.ShopCNotificationService;
 
 public class Main {
 //	static Customer customer;
@@ -34,7 +31,6 @@ public class Main {
 	private static ProductService productService = new ProductService();
 	private static ShopService shopService = new ShopService();
 	private static RankService rankService = new RankService();
-	private static NotificationService notificationService;
 
 	public static void main(String[] args) {
 		// Choose shop
@@ -62,17 +58,6 @@ public class Main {
 		int opt = Integer.parseInt(sc.nextLine());
 		
 		Storage.currentShop = shopService.getShopByIndex(opt-1);
-		switch (Storage.currentShop.dbPath) {
-			case "shopA":
-				notificationService = new ShopANotificationService();
-				break;
-			case "shopB":
-				notificationService = new ShopBNotificationService();
-				break;
-			case "shopC":
-				notificationService = new ShopCNotificationService();
-				break;
-		}
 	}
 	
 	public static boolean doLogin() {
@@ -89,7 +74,6 @@ public class Main {
 			return false;
 		}
 		Storage.cart = new Cart();
-		notificationService.sendLoginNotification();
 		
 		return true;
 	}
@@ -172,7 +156,7 @@ public class Main {
 		System.out.println("------------------------------");
 		System.out.println("Check out successful!");
 		
-		notificationService.sendCheckoutNotification(finalPrice);
+		NotificationService.getNotificationService().sendCheckoutNotification(finalPrice);
 		Storage.cart = null;
 	}
 	
