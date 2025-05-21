@@ -34,6 +34,15 @@ public class ShopService {
 		
 		return shopList;
 	}
+
+	public void showShopList() {
+		ArrayList<Shop> shopList = getAllShops();
+		
+		for (int i=0; i<shopList.size(); i++) {
+			Shop shop = shopList.get(i);
+			System.out.println((i+1) + ". " + shop.name);
+		}
+	}
 	
 	public Shop getShopByIndex(int index) {
 		ArrayList<Shop> shopList = getAllShops();

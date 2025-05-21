@@ -35,6 +35,16 @@ public class RankService {
 		return rankList;
 	}
 	
+	public void showRankList() {
+		ArrayList<Rank> rankList = getAllRanks();
+		
+		System.out.println("Available ranks and promotions:");
+		for (int i=0; i<rankList.size(); i++) {
+			Rank rank = rankList.get(i);
+			System.out.println((i+1) + ". " + rank.name + ": " + rank.description);
+		}
+	}
+	
 	public Rank getRankByName(String name) {
 		ArrayList<Rank> rankList = getAllRanks();
 		

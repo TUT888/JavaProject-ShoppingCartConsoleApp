@@ -1,4 +1,4 @@
-package shoppingcart.service.notification;
+package shoppingcart.service.shopC;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -6,10 +6,12 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 
 import shoppingcart.common.Storage;
+import shoppingcart.service.interfaces.AuthenResultHandler;
 
-public class ShopCNotificationService extends NotificationService {
+public class ShopCAuthenResultHandler implements AuthenResultHandler {
 	@Override
-	public void sendLoginNotification() {
+	public void handleSuccessfulLogin(String id) {
+		// TODO Auto-generated method stub
 		String filepath = Storage.DB_PATH + Storage.currentShop.dbPath + "/log/loginLog.txt";
 		
 		try {
@@ -23,7 +25,7 @@ public class ShopCNotificationService extends NotificationService {
 				myWriter = new FileWriter(filepath);
 			}
 			 
-			myWriter.write("[New login] UserID: " + Storage.customer.id + ", login time: " + LocalDateTime.now().toString() + "\n");
+			myWriter.write("[New login] UserID: " + id + ", login time: " + LocalDateTime.now().toString() + "\n");
 			myWriter.close();
 		} catch (IOException e) {
 			System.out.println("An error occurred.");
@@ -32,8 +34,9 @@ public class ShopCNotificationService extends NotificationService {
 	}
 
 	@Override
-	public void sendCheckoutNotification(double finalPrice) {
-		String filepath = Storage.DB_PATH + Storage.currentShop.dbPath + "/log/checkoutLog.txt";
+	public void handleFailLogin(String id) {
+		// TODO Auto-generated method stub
+		String filepath = Storage.DB_PATH + Storage.currentShop.dbPath + "/log/loginLog.txt";
 		
 		try {
 			File fileObj = new File(filepath);
@@ -45,8 +48,8 @@ public class ShopCNotificationService extends NotificationService {
 				fileObj.createNewFile();
 				myWriter = new FileWriter(filepath);
 			}
-
-			myWriter.write("[New checkout] UserID: " + Storage.customer.id + ", Total: " + finalPrice + ", Checkout time: " + LocalDateTime.now().toString() + "\n");
+			 
+			myWriter.write("[Invalid login] UserID: " + id + ", login time: " + LocalDateTime.now().toString() + "\n");
 			myWriter.close();
 		} catch (IOException e) {
 			System.out.println("An error occurred.");

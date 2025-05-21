@@ -3,7 +3,6 @@ package shoppingcart.service;
 import java.util.ArrayList;
 
 import shoppingcart.dto.Customer;
-import shoppingcart.service.notification.NotificationService;
 
 public class AuthenService {
 	private CustomerService customerService = new CustomerService();
@@ -13,14 +12,11 @@ public class AuthenService {
 		
 		for (Customer c : customerList) {
 			if (c.id.equals(id) && c.password.equals(password)) {
-				handleSuccessLogin();
+				ResultHandlingService.getAuthenResultHandler().handleSuccessfulLogin(c.id);
 				return c;
 			}
 		}
+		ResultHandlingService.getAuthenResultHandler().handleFailLogin(id);
 		return null;
-	}
-	
-	public void handleSuccessLogin() {
-		NotificationService.getNotificationService().sendLoginNotification();
 	}
 }

@@ -35,6 +35,20 @@ public class ProductService {
 		return productList;
 	}
 	
+	public void showProductList() {
+		ArrayList<Product> productList = getAllProducts();
+		
+		if (productList.size() == 0) {
+			System.out.println("There aren't any product in shop");
+			return;
+		}
+		
+		for (int i=0; i<productList.size(); i++) {
+			Product product = productList.get(i);
+			System.out.println((i+1) + ". " + product.name + " - " + product.price + " aud");
+		}
+	}
+	
 	public Product getProductByIndex(int index) {
 		ArrayList<Product> productList = getAllProducts();
 		
